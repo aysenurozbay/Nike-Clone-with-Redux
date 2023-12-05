@@ -5,6 +5,7 @@ import HomeScreen from '../pages/HomeScreen';
 import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import {images} from '../assets/images';
 import ProductDetailScreen from '../pages/ProductDetailScreen';
+import ShoppingCartScreen from '../pages/ShoppingCartScreen';
 
 const AppNavigator = () => {
   const RootStack = createNativeStackNavigator<AppNavigatorType>();
@@ -22,9 +23,11 @@ const AppNavigator = () => {
 
           animationTypeForReplace: 'push',
           animation: 'slide_from_bottom',
+          presentation: 'modal',
         }}>
         <RootStack.Screen name="Home" component={HomeScreen} />
         <RootStack.Screen name="Product" component={ProductDetailScreen} />
+        <RootStack.Screen name="Cart" component={ShoppingCartScreen} />
       </RootStack.Navigator>
     </SafeAreaView>
   );

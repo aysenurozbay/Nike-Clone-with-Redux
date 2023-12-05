@@ -10,8 +10,9 @@ import {
 import React from 'react';
 import {colors} from '../assets/colors';
 import {AppNavigatorType} from '../utils/NavigatorTypes';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {metrics} from '../utils/metrics';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 interface IProductDetailScreenProps {
   route: RouteProp<AppNavigatorType, 'Product'>;
@@ -22,10 +23,22 @@ const DOT_INDICATOR_SIZE = DOT_SIZE * 2;
 
 const ProductDetailScreen = ({route}: IProductDetailScreenProps) => {
   const {product} = route.params;
-
+  const navigation: StackNavigationProp<AppNavigatorType> = useNavigation();
   //   const scrollY = React.useRef(new Animated.Value(0)).current; // TODO: must fix animated view
 
-  const addToCart = () => {};
+  const addToCart = () => {
+    navigation.navigate('Cart', {
+      product: {
+        id: '1',
+        image:
+          'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/nike/nike1.png',
+        name: 'Wild Berry',
+        price: 160,
+      },
+      size: 42,
+      quantity: 2,
+    });
+  };
 
   return (
     <View style={styles.container}>
