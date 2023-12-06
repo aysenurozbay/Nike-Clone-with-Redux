@@ -1,17 +1,17 @@
-import {PayloadAction, createSelector, createSlice} from '@reduxjs/toolkit';
-import {CartItemType, ProductType} from '../utils/Types';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
+import { CartItemType, ProductType } from '../utils/Types'
 
 export interface ProductSliceState {
-  items: CartItemType[];
-  delivertFee: number;
-  freeDeliveryFrom: number;
+  items: CartItemType[]
+  delivertFee: number
+  freeDeliveryFrom: number
 }
 
 const initialState: ProductSliceState = {
   items: [],
   delivertFee: 15,
   freeDeliveryFrom: 200,
-};
+}
 
 export const cartSlice = createSlice({
   name: 'cart',
@@ -19,61 +19,65 @@ export const cartSlice = createSlice({
   reducers: {
     addCartItem: (
       state,
-      action: PayloadAction<{product: ProductType; size: number}>,
+      action: PayloadAction<{ product: ProductType; size: number }>
     ) => {
-      const newProduct = action.payload.product;
-      const productSize = action.payload.size;
+      const newProduct = action.payload.product
+      const productSize = action.payload.size
 
       const cartItem = state.items.find(
-        item => item.product.id === newProduct.id,
-      );
+        (item) => item.product.id === newProduct.id
+      )
 
       if (cartItem) {
-        cartItem.quantity += 1;
+        cartItem.quantity += 1
       } else {
-        state.items.push({product: newProduct, quantity: 1, size: productSize});
+        state.items.push({
+          product: newProduct,
+          quantity: 1,
+          size: productSize,
+        })
       }
     },
     changeQuantity: (
       state,
-      action: PayloadAction<{productId: string; amount: number}>,
+      action: PayloadAction<{ productId: string; amount: number }>
     ) => {
-      const {productId, amount} = action.payload;
-      const cartItem = state.items.find(item => item.product.id === productId);
+      const { productId, amount } = action.payload
+      const cartItem = state.items.find((item) => item.product.id === productId)
 
       if (cartItem) {
-        cartItem.quantity += amount;
+        cartItem.quantity += amount
       }
 
       //remove item if it is 0
 
-      if (cartItem?.quantity <= 0) {
-        state.items = state.items.filter(item => item !== cartItem);
+      if (cartItem && cartItem?.quantity <= 0) {
+        state.items = state.items.filter((item) => item !== cartItem)
       }
     },
   },
-});
+})
 
-export const selectNumberOfItem = state => state.cart.items.length;
+export const selectNumberOfItem = (state: any) => state.cart.items.length
 
-export const selectSubTotal = state =>
+export const selectSubTotal = (state: any) =>
   state.cart.items.reduce(
     (sum: number, cartItem: CartItemType) =>
       sum + cartItem.product.price * cartItem.quantity,
-    0,
-  );
+    0
+  )
 
-const cartSelector = state => state.cart;
+const cartSelector = (state: any) => state.cart
 
 //useselector -> to create new selector with other selectors
 export const selectDeliveryPrice = createSelector(
   cartSelector,
   selectSubTotal,
-  (cart, subTotal) => (subTotal > cart.freeDeliveryFrom ? 0 : cart.delivertFee),
-);
+  (cart, subTotal) => (subTotal > cart.freeDeliveryFrom ? 0 : cart.delivertFee)
+)
 
 export const totalPrice = createSelector(
   selectDeliveryPrice,
   selectSubTotal,
-  (sub, delivery) => sub + delivery,
-);
+  (sub, delivery) => sub + delivery
+)

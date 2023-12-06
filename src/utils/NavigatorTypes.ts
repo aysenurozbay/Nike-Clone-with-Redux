@@ -1,7 +1,7 @@
-import {CartItemType} from './Types';
+import { CartItemType } from './Types'
 
 export type AppNavigatorType = {
-  Home: undefined;
-  Product: undefined;
-  Cart: CartItemType | undefined;
-};
+  Home: undefined
+  Product: undefined
+  Cart: CartItemType | undefined
+}

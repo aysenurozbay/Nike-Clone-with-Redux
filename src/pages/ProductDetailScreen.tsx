@@ -6,35 +6,39 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import React from 'react';
-import {colors} from '../assets/colors';
-import {metrics} from '../utils/metrics';
-import {useDispatch, useSelector} from 'react-redux';
-import {cartSlice} from '../store/cartSlice';
+} from 'react-native'
+import React from 'react'
+import { colors } from '../assets/colors'
+import { metrics } from '../utils/metrics'
+import { useDispatch, useSelector } from 'react-redux'
+import { cartSlice } from '../store/cartSlice'
+import { RootState } from '../store'
 
-const DOT_SIZE = 8;
-const DOT_INDICATOR_SIZE = DOT_SIZE * 2;
+const DOT_SIZE = 8
+const DOT_INDICATOR_SIZE = DOT_SIZE * 2
 
 const ProductDetailScreen = () => {
-  const product = useSelector(state => state.products.selectedProduct);
+  const product = useSelector(
+    (state: RootState) => state.products.selectedProduct
+  )
   //   const scrollY = React.useRef(new Animated.Value(0)).current; // TODO: must fix animated view
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const addToCart = () => {
-    dispatch(cartSlice.actions.addCartItem({product, size: 40}));
-  };
+    product && dispatch(cartSlice.actions.addCartItem({ product, size: 40 }))
+  }
 
-  return (
+  return product ? (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scollComponent}>
         {/* <Pressable>
 
         </Pressable> */}
+
         <FlatList
           data={product.images}
-          renderItem={({item}) => (
-            <Image source={{uri: item}} style={styles.image} />
+          renderItem={({ item }) => (
+            <Image source={{ uri: item }} style={styles.image} />
           )}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -80,10 +84,10 @@ const ProductDetailScreen = () => {
         <Text style={styles.buttonText}>Add to cart</Text>
       </Pressable>
     </View>
-  );
-};
+  ) : null
+}
 
-export default ProductDetailScreen;
+export default ProductDetailScreen
 
 const styles = StyleSheet.create({
   container: {},
@@ -150,4 +154,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
   },
-});
+})

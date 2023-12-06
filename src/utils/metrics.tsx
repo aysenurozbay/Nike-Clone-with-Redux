@@ -1,7 +1,7 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native'
 
-const screen = Dimensions.get('window');
+const screen = Dimensions.get('window')
 export const metrics = {
   screenWidth: screen.width,
   screenHeight: screen.height,
-};
+}

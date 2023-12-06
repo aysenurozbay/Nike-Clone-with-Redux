@@ -1,18 +1,19 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import CartItem from '../components/CartItem';
-import {colors} from '../assets/colors';
-import {useSelector} from 'react-redux';
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import CartItem from '../components/CartItem'
+import { colors } from '../assets/colors'
+import { useSelector } from 'react-redux'
 import {
   selectDeliveryPrice,
   selectSubTotal,
   totalPrice,
-} from '../store/cartSlice';
+} from '../store/cartSlice'
+import { RootState } from 'store'
 
 const FooterComponent = () => {
-  const subTotal = useSelector(selectSubTotal);
-  const deliveryFee = useSelector(selectDeliveryPrice);
-  const total = useSelector(totalPrice);
+  const subTotal = useSelector(selectSubTotal)
+  const deliveryFee = useSelector(selectDeliveryPrice)
+  const total = useSelector(totalPrice)
 
   return (
     <View style={styles.totalsContainer}>
@@ -29,27 +30,27 @@ const FooterComponent = () => {
         <Text style={styles.textBold}>{total} US$</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const ShoppingCartScreen = () => {
   // const {cartItem} = route.params;
 
-  const cartItem = useSelector(state => state.cart.items);
-  console.log('cartItem', cartItem);
+  const cartItem = useSelector((state: RootState) => state.cart.items)
+  console.log('cartItem', cartItem)
 
   return (
     <View>
       <FlatList
         data={cartItem}
-        renderItem={({item}) => <CartItem cartItem={item} />}
+        renderItem={({ item }) => <CartItem cartItem={item} />}
         ListFooterComponent={<FooterComponent />}
       />
     </View>
-  );
-};
+  )
+}
 
-export default ShoppingCartScreen;
+export default ShoppingCartScreen
 
 const styles = StyleSheet.create({
   totalsContainer: {
@@ -71,4 +72,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-});
+})
