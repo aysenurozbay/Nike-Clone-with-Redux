@@ -1,46 +1,74 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {AppNavigatorType} from '../utils/NavigatorTypes';
-import {RouteProp} from '@react-navigation/native';
 import CartItem from '../components/CartItem';
+import {colors} from '../assets/colors';
+import {useSelector} from 'react-redux';
+import {
+  selectDeliveryPrice,
+  selectSubTotal,
+  totalPrice,
+} from '../store/cartSlice';
 
-interface IShoppingCartScreenProps {
-  route: RouteProp<AppNavigatorType, 'Cart'>;
-}
+const FooterComponent = () => {
+  const subTotal = useSelector(selectSubTotal);
+  const deliveryFee = useSelector(selectDeliveryPrice);
+  const total = useSelector(totalPrice);
 
-const ShoppingCartScreen = ({route}: IShoppingCartScreenProps) => {
-  const {cartItem} = route.params;
-
-  const cart = [
-    {
-      product: {
-        id: '2',
-        image:
-          'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/nike/nike2.png',
-        name: 'Air Force 1',
-        price: 169,
-      },
-      size: 43,
-      quantity: 1,
-    },
-    {
-      product: {
-        id: '3',
-        image:
-          'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/nike/nike3.png',
-        name: 'Nike Cosmic',
-        price: 129,
-      },
-      size: 44,
-      quantity: 1,
-    },
-  ];
   return (
-    <FlatList
-      data={cart}
-      renderItem={({item}) => <CartItem cartItem={item} />}
-    />
+    <View style={styles.totalsContainer}>
+      <View style={styles.row}>
+        <Text style={styles.text}>Subtotal</Text>
+        <Text style={styles.text}>{subTotal} US$</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.text}>Delivery</Text>
+        <Text style={styles.text}>{deliveryFee} US$</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.textBold}>Total</Text>
+        <Text style={styles.textBold}>{total} US$</Text>
+      </View>
+    </View>
+  );
+};
+
+const ShoppingCartScreen = () => {
+  // const {cartItem} = route.params;
+
+  const cartItem = useSelector(state => state.cart.items);
+  console.log('cartItem', cartItem);
+
+  return (
+    <View>
+      <FlatList
+        data={cartItem}
+        renderItem={({item}) => <CartItem cartItem={item} />}
+        ListFooterComponent={<FooterComponent />}
+      />
+    </View>
   );
 };
 
 export default ShoppingCartScreen;
+
+const styles = StyleSheet.create({
+  totalsContainer: {
+    margin: 20,
+    paddingTop: 10,
+    borderColor: 'gainsboro',
+    borderTopWidth: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 2,
+  },
+  text: {
+    fontSize: 16,
+    color: colors.gray,
+  },
+  textBold: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+});

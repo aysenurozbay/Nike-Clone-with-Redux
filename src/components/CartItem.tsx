@@ -1,19 +1,34 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {CartItemType} from '../utils/Types';
-import ArrowIcon from './icons/ArrowIcon';
+import ArrowIcon from '../assets/icons/ArrowIcon';
 import {colors} from '../assets/colors';
+import {useDispatch} from 'react-redux';
+import {cartSlice} from '../store/cartSlice';
 
 interface ICartItemProps {
   cartItem: CartItemType;
 }
 
 const CartItem = ({cartItem}: ICartItemProps) => {
+  const dispatch = useDispatch();
   const increaseQuantity = () => {
-    console.log('first');
+    dispatch(
+      cartSlice.actions.changeQuantity({
+        productId: cartItem.product.id,
+        amount: 1,
+      }),
+    );
   };
 
-  const decreaseQuantity = () => {};
+  const decreaseQuantity = () => {
+    dispatch(
+      cartSlice.actions.changeQuantity({
+        productId: cartItem.product.id,
+        amount: -1,
+      }),
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -23,15 +38,17 @@ const CartItem = ({cartItem}: ICartItemProps) => {
         <Text style={styles.size}>Size {cartItem.size}</Text>
 
         <View style={styles.footer}>
+          <Pressable onPress={decreaseQuantity}>
+            <ArrowIcon fill={colors.gray} size={20} direction="down" />
+          </Pressable>
+          <Text style={styles.quantity}>{cartItem.quantity}</Text>
           <Pressable onPress={increaseQuantity}>
             <ArrowIcon fill={colors.gray} size={20} direction="up" />
           </Pressable>
-          <Text style={styles.quantity}>{cartItem.quantity}</Text>
-          <Pressable onPress={decreaseQuantity}>
-            <ArrowIcon fill={colors.gray} size={20} direction="up" />
-          </Pressable>
 
-          <Text style={styles.itemTotal}>$320.0</Text>
+          <Text style={styles.itemTotal}>
+            ${cartItem.product.price * cartItem.quantity}
+          </Text>
         </View>
       </View>
     </View>
