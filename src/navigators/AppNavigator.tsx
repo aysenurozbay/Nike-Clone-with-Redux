@@ -15,7 +15,7 @@ const AppNavigator = () => {
       <RootStack.Navigator
         initialRouteName="Home"
         screenOptions={{
-          // headerShown: false,
+          headerShown: false,
 
           contentStyle: { backgroundColor: colors.white },
           animationTypeForReplace: 'push',

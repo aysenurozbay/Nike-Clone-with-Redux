@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cartText: {
-    color: colors.red,
+    color: colors.coldBlue,
     fontSize: 15,
     fontWeight: '600',
   },

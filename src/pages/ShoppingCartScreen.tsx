@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CartItem from '../components/CartItem'
 import { colors } from '../assets/colors'
@@ -9,6 +9,10 @@ import {
   totalPrice,
 } from '../store/cartSlice'
 import { RootState } from 'store'
+import ArrowIcon from '../assets/icons/ArrowIcon'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AppNavigatorType } from 'utils/NavigatorTypes'
+import { useNavigation } from '@react-navigation/native'
 
 const FooterComponent = () => {
   const subTotal = useSelector(selectSubTotal)
@@ -32,9 +36,11 @@ const FooterComponent = () => {
     </View>
   )
 }
-
+const ListEmptyComponent = () => {
+  return <Text style={styles.listEmpty}> Cart is empty...</Text>
+}
 const ShoppingCartScreen = () => {
-  // const {cartItem} = route.params;
+  const navigation: StackNavigationProp<AppNavigatorType> = useNavigation()
 
   const cartItem = useSelector((state: RootState) => state.cart.items)
   console.log('cartItem', cartItem)
@@ -44,8 +50,15 @@ const ShoppingCartScreen = () => {
       <FlatList
         data={cartItem}
         renderItem={({ item }) => <CartItem cartItem={item} />}
-        ListFooterComponent={<FooterComponent />}
+        ListEmptyComponent={<ListEmptyComponent />}
       />
+      {cartItem.length !== 0 && <FooterComponent />}
+      <Pressable
+        style={styles.iconContainer}
+        onPress={() => navigation.goBack()}
+      >
+        <ArrowIcon direction="left" size={30} fill={colors.coldBlue} />
+      </Pressable>
     </View>
   )
 }
@@ -71,5 +84,17 @@ const styles = StyleSheet.create({
   textBold: {
     fontSize: 16,
     fontWeight: '500',
+  },
+  listEmpty: {
+    fontSize: 14,
+    color: colors.gray,
+    fontWeight: '600',
+    textAlign: 'center',
+    padding: 20,
+  },
+  iconContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
 })
